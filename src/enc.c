@@ -235,7 +235,7 @@ uint8_t avr_rex(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_r3(int8_t* r, int8_t* eb) {
-	uint8_t a = avr_reg(r, err);
+	uint8_t a = avr_reg(r, eb);
 	if ((a < 16 || a > 23) && a < 32) {
 		*eb = 1;
 	}
@@ -244,7 +244,7 @@ uint8_t avr_r3(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_r4(int8_t* r, int8_t* eb) {
-	uint8_t a = avr_reg(r, err);
+	uint8_t a = avr_reg(r, eb);
 	if ((a < 16 || a > 32)) {
 		*eb = 1;
 	}
@@ -253,13 +253,13 @@ uint8_t avr_r4(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_r5(int8_t* r, int8_t* eb) {
-	uint8_t a = avr_reg(r, err);
+	uint8_t a = avr_reg(r, eb);
 	
 	return a & 31;
 }
 
 uint8_t avr_rw(int8_t* r, int8_t* eb) {
-	uint8_t a = avr_reg(r, err);
+	uint8_t a = avr_reg(r, eb);
 	if (a % 2 == 1) {
 		*eb = 1;
 	}
@@ -268,7 +268,7 @@ uint8_t avr_rw(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_d6(int8_t* r, int8_t* eb) {
-	uint64_t k = avr_strint(r, 1, err, 0);
+	uint64_t k = avr_strint(r, 1, eb, 0);
 	if (k > 63) {
 		*eb = 1;
 	}
@@ -291,7 +291,7 @@ uint8_t avr_d6(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_z0(int8_t* r, int8_t* eb) {
-	uint64_t k = avr_strint(r, 1, err, 0);
+	uint64_t k = avr_strint(r, 1, eb, 0);
 	if (r[0] == 'z' && r[1] == 0) {
 		return 0;
 	}
@@ -303,7 +303,7 @@ uint8_t avr_z0(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_z1(int8_t* r, int8_t* eb) {
-	uint64_t k = avr_strint(r, 1, err, 0);
+	uint64_t k = avr_strint(r, 1, eb, 0);
 	if (r[0] == 'z' && r[1] == 0) {
 		return 0;
 	}
@@ -318,7 +318,7 @@ uint8_t avr_z1(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_b3(int8_t* b, int8_t* eb) {
-	uint64_t a = avr_strint(b, 0, err, 0);
+	uint64_t a = avr_strint(b, 0, eb, 0);
 	if (a > 7) {
 		*eb = 1;
 	}
@@ -327,7 +327,7 @@ uint8_t avr_b3(int8_t* b, int8_t* eb) {
 }
 
 uint8_t avr_p5(int8_t* p, int8_t* eb) {
-	uint64_t a = avr_strint(p, 0, err, 0);
+	uint64_t a = avr_strint(p, 0, eb, 0);
 	if (a > 31) {
 		*eb = 1;
 	}
@@ -336,7 +336,7 @@ uint8_t avr_p5(int8_t* p, int8_t* eb) {
 }
 
 uint8_t avr_p6(int8_t* p, int8_t* eb) {
-	uint64_t a = avr_strint(p, 0, err, 0);
+	uint64_t a = avr_strint(p, 0, eb, 0);
 	if (a > 63) {
 		*eb = 1;
 	}
@@ -345,7 +345,7 @@ uint8_t avr_p6(int8_t* p, int8_t* eb) {
 }
 
 uint8_t avr_i4(int8_t* k, int8_t* eb, int8_t* rb) {
-	uint64_t a = avr_strint(k, 0, err, rb);
+	uint64_t a = avr_strint(k, 0, eb, rb);
 	if (a > 15) {
 		*eb = 1;
 	}
@@ -354,7 +354,7 @@ uint8_t avr_i4(int8_t* k, int8_t* eb, int8_t* rb) {
 }
 
 uint8_t avr_i6(int8_t* k, int8_t* eb, int8_t* rb) {
-	uint64_t a = avr_strint(k, 0, err, rb);
+	uint64_t a = avr_strint(k, 0, eb, rb);
 	if (a > 63) {
 		*eb = 1;
 	}
@@ -365,10 +365,10 @@ uint8_t avr_i6(int8_t* k, int8_t* eb, int8_t* rb) {
 uint8_t avr_i7(int8_t* k, int8_t* eb, int8_t* rb) {
 	int64_t a;
 	if (k[0] == '-') {
-		a = -1 * avr_strint(k, 1, err, rb);
+		a = -1 * avr_strint(k, 1, eb, rb);
 	}
 	else {
-		a = avr_strint(k, 0, err, rb);
+		a = avr_strint(k, 0, eb, rb);
 	}
 	
 	if (a > 63 || a < -64) {
@@ -382,7 +382,7 @@ uint8_t avr_i7(int8_t* k, int8_t* eb, int8_t* rb) {
 }
 
 uint8_t avr_i8(int8_t* k, int8_t* eb, int8_t* rb) {
-	uint64_t a = avr_strint(k, 0, err, rb);
+	uint64_t a = avr_strint(k, 0, eb, rb);
 	if (a > 255) {
 		*eb = 1;
 	}
@@ -391,7 +391,7 @@ uint8_t avr_i8(int8_t* k, int8_t* eb, int8_t* rb) {
 }
 
 uint16_t avr_i16(int8_t* k, int8_t* eb, int8_t* rb) {
-	uint64_t a = avr_strint(k, 0, err, rb);
+	uint64_t a = avr_strint(k, 0, eb, rb);
 	if (a > 65535) {
 		*eb = 1;
 	}
@@ -415,7 +415,7 @@ uint64_t avr_movw(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_muls(uint8_t rd, uint8_t rs) {
+uint64_t avr_muls(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 2;
 	
@@ -425,7 +425,7 @@ uint64_t avr_muls(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_mulsu(uint8_t rd, uint8_t rs) {
+uint64_t avr_mulsu(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 3;
 		
@@ -435,7 +435,7 @@ uint64_t avr_mulsu(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_fmul(uint8_t rd, uint8_t rs) {
+uint64_t avr_fmul(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 8;
 	bits[bn + 1] = 3;
 	
@@ -445,7 +445,7 @@ uint64_t avr_fmul(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_fmuls(uint8_t rd, uint8_t rs) {
+uint64_t avr_fmuls(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 128;
 	bits[bn + 1] = 3;
 		
@@ -455,7 +455,7 @@ uint64_t avr_fmuls(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_fmulsu(uint8_t rd, uint8_t rs) {
+uint64_t avr_fmulsu(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 136;
 	bits[bn + 1] = 3;
 		
@@ -465,7 +465,7 @@ uint64_t avr_fmulsu(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_cp(uint8_t rd, uint8_t rs) {
+uint64_t avr_cp(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 20;
 		
@@ -477,7 +477,7 @@ uint64_t avr_cp(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_cpc(uint8_t rd, uint8_t rs) {
+uint64_t avr_cpc(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 4;
 	
@@ -489,7 +489,7 @@ uint64_t avr_cpc(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_sub(uint8_t rd, uint8_t rs) {
+uint64_t avr_sub(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 24;
 		
@@ -501,7 +501,7 @@ uint64_t avr_sub(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_sbc(uint8_t rd, uint8_t rs) {
+uint64_t avr_sbc(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 8;
 	
@@ -513,7 +513,7 @@ uint64_t avr_sbc(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_add(uint8_t rd, uint8_t rs) {
+uint64_t avr_add(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 12;
 	
@@ -525,7 +525,7 @@ uint64_t avr_add(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_adc(uint8_t rd, uint8_t rs) {
+uint64_t avr_adc(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 28;
 	
@@ -537,7 +537,7 @@ uint64_t avr_adc(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_lsl(uint8_t rd) {
+uint64_t avr_lsl(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 0;
 	bits[bn + 1] = 12;
 		
@@ -549,7 +549,7 @@ uint64_t avr_lsl(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_rol(uint8_t rd) {
+uint64_t avr_rol(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 0;
 	bits[bn + 1] = 28;
 	
@@ -561,7 +561,7 @@ uint64_t avr_rol(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_cpse(uint8_t rd, uint8_t rs) {
+uint64_t avr_cpse(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 16;
 	
@@ -573,7 +573,7 @@ uint64_t avr_cpse(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_and(uint8_t rd, uint8_t rs) {
+uint64_t avr_and(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 32;
 	
@@ -585,7 +585,7 @@ uint64_t avr_and(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_tst(uint8_t rd) {
+uint64_t avr_tst(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 0;
 	bits[bn + 1] = 32;
 	
@@ -597,7 +597,7 @@ uint64_t avr_tst(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_eor(uint8_t rd, uint8_t rs) {
+uint64_t avr_eor(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 36;
 	
@@ -609,7 +609,7 @@ uint64_t avr_eor(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_clr(uint8_t rd) {
+uint64_t avr_clr(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 0;
 	bits[bn + 1] = 36;
 	
@@ -621,7 +621,7 @@ uint64_t avr_clr(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_or(uint8_t rd, uint8_t rs) {
+uint64_t avr_or(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 40;
 	
@@ -633,7 +633,7 @@ uint64_t avr_or(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_mov(uint8_t rd, uint8_t rs) {
+uint64_t avr_mov(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 44;
 	
@@ -645,7 +645,7 @@ uint64_t avr_mov(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_cpi(uint8_t rd, uint8_t k) {
+uint64_t avr_cpi(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 48;
 	
@@ -656,7 +656,7 @@ uint64_t avr_cpi(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_subi(uint8_t rd, uint8_t k) {
+uint64_t avr_subi(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 80;
 		
@@ -667,7 +667,7 @@ uint64_t avr_subi(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_sbci(uint8_t rd, uint8_t k) {
+uint64_t avr_sbci(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 64;
 		
@@ -678,7 +678,7 @@ uint64_t avr_sbci(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_ori(uint8_t rd, uint8_t k) {
+uint64_t avr_ori(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 96;
 	
@@ -689,7 +689,7 @@ uint64_t avr_ori(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_sbr(uint8_t rd, uint8_t k) {
+uint64_t avr_sbr(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 96;
 	
@@ -700,7 +700,7 @@ uint64_t avr_sbr(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_andi(uint8_t rd, uint8_t k) {
+uint64_t avr_andi(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 112;
 	
@@ -711,7 +711,7 @@ uint64_t avr_andi(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_cbr(uint8_t rd, uint8_t k) {
+uint64_t avr_cbr(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 112;
 	
@@ -722,7 +722,7 @@ uint64_t avr_cbr(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_ldi(uint8_t rd, uint8_t k) {
+uint64_t avr_ldi(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 224;
 	
@@ -733,7 +733,7 @@ uint64_t avr_ldi(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_ldd(uint8_t rd, uint8_t rs) {
+uint64_t avr_ldd(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 128;
 	
@@ -746,7 +746,7 @@ uint64_t avr_ldd(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_std(uint8_t rd, uint8_t rs) {
+uint64_t avr_std(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 130;
 		
@@ -759,7 +759,7 @@ uint64_t avr_std(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_lds(uint8_t rd, uint16_t k) {
+uint64_t avr_lds(uint8_t* bits, uint64_t bn, uint8_t rd, uint16_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 144;
 	
@@ -771,7 +771,7 @@ uint64_t avr_lds(uint8_t rd, uint16_t k) {
 	return bn + 4;
 }
 
-uint64_t avr_sts(uint8_t k, uint8_t rs) {
+uint64_t avr_sts(uint8_t* bits, uint64_t bn, uint8_t k, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 146;
 	
@@ -783,7 +783,7 @@ uint64_t avr_sts(uint8_t k, uint8_t rs) {
 	return bn + 4;
 }
 
-uint64_t avr_ld(uint8_t rd, uint8_t rs) {
+uint64_t avr_ld(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 128;
 		
@@ -795,7 +795,7 @@ uint64_t avr_ld(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_st(uint8_t rd, uint8_t rs) {
+uint64_t avr_st(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 130;
 	
@@ -807,7 +807,7 @@ uint64_t avr_st(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_lpm(uint8_t rd, uint8_t rs) {
+uint64_t avr_lpm(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 4;
 	bits[bn + 1] = 144;
 	//todo
@@ -818,7 +818,7 @@ uint64_t avr_lpm(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_elpm(uint8_t rd, uint8_t rs) {
+uint64_t avr_elpm(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 6;
 	bits[bn + 1] = 144;
 	//todo
@@ -829,7 +829,7 @@ uint64_t avr_elpm(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_xch(uint8_t rd, uint8_t rs) {
+uint64_t avr_xch(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 4;
 	bits[bn + 1] = 146;
 	
@@ -839,7 +839,7 @@ uint64_t avr_xch(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_las(uint8_t rd, uint8_t rs) {
+uint64_t avr_las(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 5;
 	bits[bn + 1] = 146;
 	
@@ -849,7 +849,7 @@ uint64_t avr_las(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_lac(uint8_t rd, uint8_t rs) {
+uint64_t avr_lac(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 6;
 	bits[bn + 1] = 146;
 	
@@ -859,7 +859,7 @@ uint64_t avr_lac(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_lat(uint8_t rd, uint8_t rs) {
+uint64_t avr_lat(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 7;
 	bits[bn + 1] = 146;
 	
@@ -869,7 +869,7 @@ uint64_t avr_lat(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_pop(uint8_t rd) {
+uint64_t avr_pop(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 15;
 	bits[bn + 1] = 144;
 	
@@ -879,7 +879,7 @@ uint64_t avr_pop(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_push(uint8_t rd) {
+uint64_t avr_push(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 15;
 	bits[bn + 1] = 146;
 	
@@ -889,7 +889,7 @@ uint64_t avr_push(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_com(uint8_t rd) {
+uint64_t avr_com(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 0;
 	bits[bn + 1] = 148;
 	
@@ -899,7 +899,7 @@ uint64_t avr_com(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_neg(uint8_t rd) {
+uint64_t avr_neg(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 1;
 	bits[bn + 1] = 148;
 	
@@ -909,7 +909,7 @@ uint64_t avr_neg(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_swap(uint8_t rd) {
+uint64_t avr_swap(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 2;
 	bits[bn + 1] = 148;
 	
@@ -919,7 +919,7 @@ uint64_t avr_swap(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_inc(uint8_t rd) {
+uint64_t avr_inc(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 3;
 	bits[bn + 1] = 148;
 	
@@ -929,7 +929,7 @@ uint64_t avr_inc(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_dec(uint8_t rd) {
+uint64_t avr_dec(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 10;
 	bits[bn + 1] = 148;
 	
@@ -939,7 +939,7 @@ uint64_t avr_dec(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_asr(uint8_t rd) {
+uint64_t avr_asr(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 5;
 	bits[bn + 1] = 148;
 	
@@ -949,7 +949,7 @@ uint64_t avr_asr(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_lsr(uint8_t rd) {
+uint64_t avr_lsr(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 6;
 	bits[bn + 1] = 148;
 	
@@ -959,7 +959,7 @@ uint64_t avr_lsr(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_ror(uint8_t rd) {
+uint64_t avr_ror(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 7;
 	bits[bn + 1] = 148;
 	
@@ -969,7 +969,7 @@ uint64_t avr_ror(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_bset(uint8_t b) {
+uint64_t avr_bset(uint8_t* bits, uint64_t bn, uint8_t b) {
 	bits[bn] = 8;
 	bits[bn + 1] = 148;
 	
@@ -978,63 +978,63 @@ uint64_t avr_bset(uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_sec() {
+uint64_t avr_sec(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 8;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_sez() {
+uint64_t avr_sez(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 24;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_sen() {
+uint64_t avr_sen(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 40;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_sev() {
+uint64_t avr_sev(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 56;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_ses() {
+uint64_t avr_ses(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 72;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_seh() {
+uint64_t avr_seh(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 88;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_set() {
+uint64_t avr_set(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 104;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_sei() {
+uint64_t avr_sei(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 120;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_bclr(uint8_t b) {
+uint64_t avr_bclr(uint8_t* bits, uint64_t bn, uint8_t b) {
 	bits[bn] = 136;
 	bits[bn + 1] = 148;
 	
@@ -1043,56 +1043,56 @@ uint64_t avr_bclr(uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_clc() {
+uint64_t avr_clc(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 136;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_clz() {
+uint64_t avr_clz(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 152;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_cln() {
+uint64_t avr_cln(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 168;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_clv() {
+uint64_t avr_clv(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 184;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_cls() {
+uint64_t avr_cls(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 200;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_clh() {
+uint64_t avr_clh(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 216;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_clt() {
+uint64_t avr_clt(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 232;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_cli() {
+uint64_t avr_cli(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 248;
 	bits[bn + 1] = 148;
 	
@@ -1100,42 +1100,42 @@ uint64_t avr_cli() {
 }
 
 
-uint64_t avr_ret() {
+uint64_t avr_ret(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 8;
 	bits[bn + 1] = 149;
 	
 	return bn + 2;
 }
 
-uint64_t avr_reti() {
+uint64_t avr_reti(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 24;
 	bits[bn + 1] = 149;
 	
 	return bn + 2;
 }
 
-uint64_t avr_sleep() {
+uint64_t avr_sleep(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 136;
 	bits[bn + 1] = 149;
 	
 	return bn + 2;
 }
 
-uint64_t avr_break() {
+uint64_t avr_break(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 152;
 	bits[bn + 1] = 149;
 	
 	return bn + 2;
 }
 
-uint64_t avr_wdr() {
+uint64_t avr_wdr(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 168;
 	bits[bn + 1] = 149;
 	
 	return bn + 2;
 }
 
-uint64_t avr_spm(uint8_t rd) {
+uint64_t avr_spm(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 232;
 	bits[bn + 1] = 149;
 	
@@ -1144,35 +1144,35 @@ uint64_t avr_spm(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_ijmp() {
+uint64_t avr_ijmp(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 9;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_eijmp() {
+uint64_t avr_eijmp(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 25;
 	bits[bn + 1] = 148;
 	
 	return bn + 2;
 }
 
-uint64_t avr_icall() {
+uint64_t avr_icall(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 9;
 	bits[bn + 1] = 149;
 	
 	return bn + 2;
 }
 
-uint64_t avr_eicall() {
+uint64_t avr_eicall(uint8_t* bits, uint64_t bn) {
 	bits[bn] = 25;
 	bits[bn + 1] = 149;
 	
 	return bn + 2;
 }
 
-uint64_t avr_des(uint8_t k) {
+uint64_t avr_des(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 11;
 	bits[bn + 1] = 148;
 		
@@ -1181,7 +1181,7 @@ uint64_t avr_des(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_jmp(uint16_t k) {
+uint64_t avr_jmp(uint8_t* bits, uint64_t bn, uint16_t k) {
 	bits[bn] = 12;
 	bits[bn + 1] = 148;
 	bits[bn + 2] = k;
@@ -1190,7 +1190,7 @@ uint64_t avr_jmp(uint16_t k) {
 	return bn + 4;
 }
 
-uint64_t avr_call(uint16_t k) {
+uint64_t avr_call(uint8_t* bits, uint64_t bn, uint16_t k) {
 	bits[bn] = 14;
 	bits[bn + 1] = 148;
 	bits[bn + 2] = k;
@@ -1199,7 +1199,7 @@ uint64_t avr_call(uint16_t k) {
 	return bn + 4;
 }
 
-uint64_t avr_adiw(uint8_t rd, uint8_t k) {
+uint64_t avr_adiw(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 150;
 	
@@ -1210,7 +1210,7 @@ uint64_t avr_adiw(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_sbiw(uint8_t rd, uint8_t k) {
+uint64_t avr_sbiw(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 151;
 	
@@ -1221,7 +1221,7 @@ uint64_t avr_sbiw(uint8_t rd, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_cbi(uint8_t p, uint8_t b) {
+uint64_t avr_cbi(uint8_t* bits, uint64_t bn, uint8_t p, uint8_t b) {
 	bits[bn] = 0;
 	bits[bn + 1] = 152;
 	
@@ -1231,7 +1231,7 @@ uint64_t avr_cbi(uint8_t p, uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_sbi(uint8_t p, uint8_t b) {
+uint64_t avr_sbi(uint8_t* bits, uint64_t bn, uint8_t p, uint8_t b) {
 	bits[bn] = 0;
 	bits[bn + 1] = 154;
 	
@@ -1241,7 +1241,7 @@ uint64_t avr_sbi(uint8_t p, uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_sbic(uint8_t p, uint8_t b) {
+uint64_t avr_sbic(uint8_t* bits, uint64_t bn, uint8_t p, uint8_t b) {
 	bits[bn] = 0;
 	bits[bn + 1] = 153;
 	
@@ -1251,7 +1251,7 @@ uint64_t avr_sbic(uint8_t p, uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_sbis(uint8_t p, uint8_t b) {
+uint64_t avr_sbis(uint8_t* bits, uint64_t bn, uint8_t p, uint8_t b) {
 	bits[bn] = 0;
 	bits[bn + 1] = 155;
 	
@@ -1261,7 +1261,7 @@ uint64_t avr_sbis(uint8_t p, uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_mul(uint8_t rd, uint8_t rs) {
+uint64_t avr_mul(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 156;
 	
@@ -1273,7 +1273,7 @@ uint64_t avr_mul(uint8_t rd, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_in(uint8_t rd, uint8_t p) {
+uint64_t avr_in(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t p) {
 	bits[bn] = 0;
 	bits[bn + 1] = 176;
 	
@@ -1285,7 +1285,7 @@ uint64_t avr_in(uint8_t rd, uint8_t p) {
 	return bn + 2;
 }
 
-uint64_t avr_out(uint8_t p, uint8_t rs) {
+uint64_t avr_out(uint8_t* bits, uint64_t bn, uint8_t p, uint8_t rs) {
 	bits[bn] = 0;
 	bits[bn + 1] = 184;
 	
@@ -1297,7 +1297,7 @@ uint64_t avr_out(uint8_t p, uint8_t rs) {
 	return bn + 2;
 }
 
-uint64_t avr_rjmp(uint16_t k) {
+uint64_t avr_rjmp(uint8_t* bits, uint64_t bn, uint16_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 192;
 	
@@ -1307,7 +1307,7 @@ uint64_t avr_rjmp(uint16_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_rcall(uint16_t k) {
+uint64_t avr_rcall(uint8_t* bits, uint64_t bn, uint16_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 208;
 	
@@ -1317,7 +1317,7 @@ uint64_t avr_rcall(uint16_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_ser(uint8_t rd) {
+uint64_t avr_ser(uint8_t* bits, uint64_t bn, uint8_t rd) {
 	bits[bn] = 15;
 	bits[bn + 1] = 239;
 	
@@ -1326,7 +1326,7 @@ uint64_t avr_ser(uint8_t rd) {
 	return bn + 2;
 }
 
-uint64_t avr_brcs(uint8_t k) {
+uint64_t avr_brcs(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 240;
 	
@@ -1336,7 +1336,7 @@ uint64_t avr_brcs(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brlo(uint8_t k) {
+uint64_t avr_brlo(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 240;
 	
@@ -1346,7 +1346,7 @@ uint64_t avr_brlo(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brcc(uint8_t k) {
+uint64_t avr_brcc(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 244;
 	
@@ -1356,7 +1356,7 @@ uint64_t avr_brcc(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brsh(uint8_t k) {
+uint64_t avr_brsh(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 244;
 	
@@ -1366,7 +1366,7 @@ uint64_t avr_brsh(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_breq(uint8_t k) {
+uint64_t avr_breq(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 1;
 	bits[bn + 1] = 240;
 	
@@ -1376,7 +1376,7 @@ uint64_t avr_breq(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brne(uint8_t k) {
+uint64_t avr_brne(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 1;
 	bits[bn + 1] = 244;
 	
@@ -1386,7 +1386,7 @@ uint64_t avr_brne(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brmi(uint8_t k) {
+uint64_t avr_brmi(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 2;
 	bits[bn + 1] = 240;
 	
@@ -1396,7 +1396,7 @@ uint64_t avr_brmi(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brpl(uint8_t k) {
+uint64_t avr_brpl(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 2;
 	bits[bn + 1] = 244;
 	
@@ -1406,7 +1406,7 @@ uint64_t avr_brpl(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brvs(uint8_t k) {
+uint64_t avr_brvs(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 3;
 	bits[bn + 1] = 240;
 	
@@ -1416,7 +1416,7 @@ uint64_t avr_brvs(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brvc(uint8_t k) {
+uint64_t avr_brvc(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 3;
 	bits[bn + 1] = 244;
 	
@@ -1426,7 +1426,7 @@ uint64_t avr_brvc(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brlt(uint8_t k) {
+uint64_t avr_brlt(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 4;
 	bits[bn + 1] = 240;
 	
@@ -1436,7 +1436,7 @@ uint64_t avr_brlt(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brge(uint8_t k) {
+uint64_t avr_brge(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 4;
 	bits[bn + 1] = 244;
 	
@@ -1446,7 +1446,7 @@ uint64_t avr_brge(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brhs(uint8_t k) {
+uint64_t avr_brhs(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 5;
 	bits[bn + 1] = 240;
 	
@@ -1456,7 +1456,7 @@ uint64_t avr_brhs(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brhc(uint8_t k) {
+uint64_t avr_brhc(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 5;
 	bits[bn + 1] = 244;
 	
@@ -1466,7 +1466,7 @@ uint64_t avr_brhc(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brts(uint8_t k) {
+uint64_t avr_brts(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 6;
 	bits[bn + 1] = 240;
 		
@@ -1476,7 +1476,7 @@ uint64_t avr_brts(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brtc(uint8_t k) {
+uint64_t avr_brtc(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 6;
 	bits[bn + 1] = 244;
 	
@@ -1486,7 +1486,7 @@ uint64_t avr_brtc(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brie(uint8_t k) {
+uint64_t avr_brie(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 7;
 	bits[bn + 1] = 240;
 		
@@ -1496,7 +1496,7 @@ uint64_t avr_brie(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brid(uint8_t k) {
+uint64_t avr_brid(uint8_t* bits, uint64_t bn, uint8_t k) {
 	bits[bn] = 7;
 	bits[bn + 1] = 244;
 	
@@ -1506,7 +1506,7 @@ uint64_t avr_brid(uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brbs(uint8_t b, uint8_t k) {
+uint64_t avr_brbs(uint8_t* bits, uint64_t bn, uint8_t b, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 240;
 	
@@ -1517,7 +1517,7 @@ uint64_t avr_brbs(uint8_t b, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_brbc(uint8_t b, uint8_t k) {
+uint64_t avr_brbc(uint8_t* bits, uint64_t bn, uint8_t b, uint8_t k) {
 	bits[bn] = 0;
 	bits[bn + 1] = 244;
 	
@@ -1528,7 +1528,7 @@ uint64_t avr_brbc(uint8_t b, uint8_t k) {
 	return bn + 2;
 }
 
-uint64_t avr_bld(uint8_t rd, uint8_t b) {
+uint64_t avr_bld(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t b) {
 	bits[bn] = 0;
 	bits[bn + 1] = 248;
 	
@@ -1539,7 +1539,7 @@ uint64_t avr_bld(uint8_t rd, uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_bst(uint8_t rd, uint8_t b) {
+uint64_t avr_bst(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t b) {
 	bits[bn] = 0;
 	bits[bn + 1] = 250;
 	
@@ -1550,7 +1550,7 @@ uint64_t avr_bst(uint8_t rd, uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_sbrc(uint8_t rd, uint8_t b) {
+uint64_t avr_sbrc(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t b) {
 	bits[bn] = 0;
 	bits[bn + 1] = 252;
 		
@@ -1561,7 +1561,7 @@ uint64_t avr_sbrc(uint8_t rd, uint8_t b) {
 	return bn + 2;
 }
 
-uint64_t avr_sbrs(uint8_t rd, uint8_t b) {
+uint64_t avr_sbrs(uint8_t* bits, uint64_t bn, uint8_t rd, uint8_t b) {
 	bits[bn] = 0;
 	bits[bn + 1] = 254;
 	

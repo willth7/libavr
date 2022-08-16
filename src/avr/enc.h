@@ -22,5 +22,5 @@ typedef struct avr_s {
 	uint8_t rel;
 } avr_t;
 
-avr_t avr_enc(int8_t*, err_t*);
+avr_t avr_enc(int8_t*, int8_t*);
 
