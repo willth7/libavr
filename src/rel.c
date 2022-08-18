@@ -12,14 +12,16 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+#include <stdint.h>
+
 void avr_rel(uint8_t* bits, uint16_t addr, uint16_t rddr, uint8_t type) {
 	if (type == 2) {
 		bits[0] &= 7;
-		bits[0] |= ((rddr - addr) / 2) << 3;
+		bits[0] |= (rddr - addr) >> 4;
 		bits[1] &= 252;
-		bits[1] |= (((rddr - addr) / 2) >> 5) & 3;
+		bits[1] |= ((rddr - addr) >> 6) & 3;
 	}
-	else if (type == 3) {
+	else if (type == 3) { //todo
 		bits[0] = 0;
 		bits[0] |= ((rddr - addr) / 2);
 		bits[1] &= 240;
