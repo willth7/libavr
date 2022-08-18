@@ -25,6 +25,66 @@ typedef struct avr_s {
 	uint8_t rel;
 } avr_t;
 
+int8_t* avr_err(int8_t e) {
+	if (e == 1) {
+		return "unknown opcode";
+	}
+	else if (e == 2) {
+		return "expected operand";
+	}
+	else if (e == 3) {
+		return "unexpected operand";
+	}
+	else if (e == 4) {
+		return "unknown register";
+	}
+	else if (e == 5) {
+		return "operand must be registers r0 - r31";
+	}
+	else if (e == 6) {
+		return "operand must be registers r16 - r31";
+	}
+	else if (e == 7) {
+		return "operand must be registers r16 - r23";
+	}
+	else if (e == 8) {
+		return "operand must be registers r0, r2, r4,.. r30";
+	}
+	else if (e == 9) {
+		return "operand must be pointers w, x, y, or z";
+	}
+	else if (e == 10) {
+		return "operand must be pointers x, y, or z";
+	}
+	else if (e == 11) {
+		return "pointer displacment can't be higher than 63";
+	}
+	else if (e == 12) {
+		return "operand must be pointer z";
+	}
+	else if (e == 13) {
+		return "operand must be bit 0 - 7";
+	}
+	else if (e == 14) {
+		return "operand must be register 0 - 32";
+	}
+	else if (e == 15) {
+		return "operand must be register 0 - 64";
+	}
+	else if (e == 16) {
+		return "operand must be immediate 0 - 16";
+	}
+	else if (e == 17) {
+		return "operand must be immediate 0 - 64";
+	}
+	else if (e == 18) {
+		return "operand must be immediate 0 - 255";
+	}
+	else if (e == 19) {
+		return "operand must be immediate 0 - 65535";
+	}
+}
+
 uint64_t avr_strint(int8_t* str, uint8_t i, int8_t* eb, int8_t* rb) {
 	uint64_t v = 0;
 	if (str[i] == 39 && str[i + 2] == 39) {
@@ -182,11 +242,16 @@ uint8_t avr_reg(int8_t* r, int8_t* eb) {
 		return 31;
 	}
 	else {
-		*eb = 1;
+		*eb = 2;
 	}
 }
 
 uint8_t avr_r2(int8_t* r, int8_t* eb) {
+	if (!r) {
+		*eb = 2;
+		return 0;
+	}
+	
 	if ((r[0] == 'r' && r[1] == '2' && r[2] == '4' && r[3] == 0) || (r[0] == 'w' && r[1] == 0)) {
 		return 0;
 	}
@@ -200,11 +265,16 @@ uint8_t avr_r2(int8_t* r, int8_t* eb) {
 		return 3;
 	}
 	else {
-		*eb = 1;
+		*eb = 3;
 	}
 }
 
 uint8_t avr_rex(int8_t* r, int8_t* eb) {
+	if (!r) {
+		*eb = 2;
+		return 0;
+	}
+	
 	if (r[0] == 'x' && r[1] == 0) {
 		return 28;
 	}
@@ -235,6 +305,11 @@ uint8_t avr_rex(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_r3(int8_t* r, int8_t* eb) {
+	if (!r) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint8_t a = avr_reg(r, eb);
 	if ((a < 16 || a > 23) && a < 32) {
 		*eb = 1;
@@ -244,6 +319,11 @@ uint8_t avr_r3(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_r4(int8_t* r, int8_t* eb) {
+	if (!r) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint8_t a = avr_reg(r, eb);
 	if ((a < 16 || a > 32)) {
 		*eb = 1;
@@ -253,6 +333,11 @@ uint8_t avr_r4(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_r5(int8_t* r, int8_t* eb) {
+	if (!r) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint8_t a = avr_reg(r, eb);
 	
 	return a & 31;
@@ -291,6 +376,11 @@ uint8_t avr_d6(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_z0(int8_t* r, int8_t* eb) {
+	if (!r) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t k = avr_strint(r, 1, eb, 0);
 	if (r[0] == 'z' && r[1] == 0) {
 		return 0;
@@ -303,6 +393,11 @@ uint8_t avr_z0(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_z1(int8_t* r, int8_t* eb) {
+	if (!r) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t k = avr_strint(r, 1, eb, 0);
 	if (r[0] == 'z' && r[1] == 0) {
 		return 0;
@@ -318,6 +413,11 @@ uint8_t avr_z1(int8_t* r, int8_t* eb) {
 }
 
 uint8_t avr_b3(int8_t* b, int8_t* eb) {
+	if (!b) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t a = avr_strint(b, 0, eb, 0);
 	if (a > 7) {
 		*eb = 1;
@@ -327,6 +427,11 @@ uint8_t avr_b3(int8_t* b, int8_t* eb) {
 }
 
 uint8_t avr_p5(int8_t* p, int8_t* eb) {
+	if (!p) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t a = avr_strint(p, 0, eb, 0);
 	if (a > 31) {
 		*eb = 1;
@@ -336,6 +441,11 @@ uint8_t avr_p5(int8_t* p, int8_t* eb) {
 }
 
 uint8_t avr_p6(int8_t* p, int8_t* eb) {
+	if (!p) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t a = avr_strint(p, 0, eb, 0);
 	if (a > 63) {
 		*eb = 1;
@@ -345,6 +455,11 @@ uint8_t avr_p6(int8_t* p, int8_t* eb) {
 }
 
 uint8_t avr_i4(int8_t* k, int8_t* eb, int8_t* rb) {
+	if (!k) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t a = avr_strint(k, 0, eb, rb);
 	if (a > 15) {
 		*eb = 1;
@@ -354,6 +469,11 @@ uint8_t avr_i4(int8_t* k, int8_t* eb, int8_t* rb) {
 }
 
 uint8_t avr_i6(int8_t* k, int8_t* eb, int8_t* rb) {
+	if (!k) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t a = avr_strint(k, 0, eb, rb);
 	if (a > 63) {
 		*eb = 1;
@@ -363,6 +483,11 @@ uint8_t avr_i6(int8_t* k, int8_t* eb, int8_t* rb) {
 }
 
 uint8_t avr_i7(int8_t* k, int8_t* eb, int8_t* rb) {
+	if (!k) {
+		*eb = 2;
+		return 0;
+	}
+	
 	int64_t a;
 	if (k[0] == '-') {
 		a = -1 * avr_strint(k, 1, eb, rb);
@@ -382,6 +507,11 @@ uint8_t avr_i7(int8_t* k, int8_t* eb, int8_t* rb) {
 }
 
 uint8_t avr_i8(int8_t* k, int8_t* eb, int8_t* rb) {
+	if (!k) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t a = avr_strint(k, 0, eb, rb);
 	if (a > 255) {
 		*eb = 1;
@@ -391,6 +521,11 @@ uint8_t avr_i8(int8_t* k, int8_t* eb, int8_t* rb) {
 }
 
 uint16_t avr_i16(int8_t* k, int8_t* eb, int8_t* rb) {
+	if (!k) {
+		*eb = 2;
+		return 0;
+	}
+	
 	uint64_t a = avr_strint(k, 0, eb, rb);
 	if (a > 65535) {
 		*eb = 1;
